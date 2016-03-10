@@ -10,11 +10,7 @@ module MultiDomains
     end
 
     def domain_customizable_name
-      self.domain_customizable_class.to_s.underscore
-    end
-
-    def default_domain_regexp
-      /#{self.main_domain_name}\.(dev|#{self.main_domain_extension})/
+      domain_customizable_class.to_s.underscore
     end
   end
 end
