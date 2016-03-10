@@ -1,5 +1,6 @@
-#require 'multi_domains/domain_customizable'
-#require 'multi_domains/domain_handler'
+require 'multi_domains/version'
+require 'multi_domains/domain_customizable'
+require 'multi_domains/domain_handler'
 
 module MultiDomains
   class << self
