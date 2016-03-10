@@ -1,5 +1,3 @@
-require 'multi_domains'
-
 module MultiDomains::DomainCustomizable
 
   def self.included(base)
