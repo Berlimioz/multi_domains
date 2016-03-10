@@ -12,17 +12,17 @@ module MultiDomains::DomainCustomizable
   end
 
   def default_url_params
-    url_params = {domain: domain, host: ENV['HTTP_HOST'], protocol: custom_protocol}
+    url_params = {domain: domain, protocol: custom_protocol, host: custom_host}
     url_params[:subdomain] = get_subdomain unless get_subdomain.blank?
     url_params
   end
 
   def custom_protocol
-    "http#{ENV['PROTOCOL'] == 'https://' ? 's' : ''}://"
+    "http#{MultiDomains.protocol == 'https://' ? 's' : ''}://"
   end
 
   def domain
-    custom_domain.blank? ? "#{MultiDomains.main_domain_name}.#{Rails.env.production? ? MultiDomains.main_extension : 'dev'}" : custom_domain
+    custom_domain.blank? ? MultiDomains.default_domain : custom_domain
   end
 
   def get_subdomain
@@ -30,6 +30,15 @@ module MultiDomains::DomainCustomizable
       read_attribute(:subdomain)
     else
       custom_subdomain.blank? ? "" : custom_subdomain
+    end
+  end
+
+  def custom_host
+    subdomain = get_subdomain
+    if subdomain.present?
+      "#{subdomain}.#{domain}"
+    else
+      domain
     end
   end
 
