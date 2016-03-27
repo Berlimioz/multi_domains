@@ -7,14 +7,14 @@ module MultiDomains::DomainHandler
   module ClassMethods
     def handle_multiple_domains
       define_method("current_#{MultiDomains.domain_customizable_name}") do
-        @current_object
+        MultiDomains.domain_customizable_class.find_by(fetch_current_object_params)
       end
 
       if MultiDomains.force_redirect_to_https?
         before_filter :redirect_to_https
       end
 
-      before_filter :fetch_current_object
+      before_filter :fetch_current_object_params
       before_filter :redirect_to_standard
       helper_method "current_#{MultiDomains.domain_customizable_name}"
     end
@@ -44,17 +44,17 @@ module MultiDomains::DomainHandler
     MultiDomains.default_domain != request.domain
   end
 
-  def fetch_current_object
+  def fetch_current_object_params
     if custom_domain?
       find_by_params = {
         custom_domain: request.domain
       }
       find_by_params[:custom_subdomain] = request.subdomain unless request.subdomain.blank?
 
-      @current_object ||= MultiDomains.domain_customizable_class.find_by(find_by_params)
     elsif subdomain?
-      @current_object ||= MultiDomains.domain_customizable_class.find_by(subdomain: request.subdomain)
+      find_by_params = {subdomain: request.subdomain}
     end
+    find_by_params
   end
 
 end
