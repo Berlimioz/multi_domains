@@ -7,7 +7,8 @@ module MultiDomains::DomainHandler
   module ClassMethods
     def handle_multiple_domains
       define_method("current_#{MultiDomains.domain_customizable_name}") do
-        MultiDomains.domain_customizable_class.find_by(fetch_current_object_params)
+        params = fetch_current_object_params
+        MultiDomains.domain_customizable_class.find_by(params) if params.present?
       end
 
       if MultiDomains.force_redirect_to_https?
