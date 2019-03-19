@@ -12,11 +12,11 @@ module MultiDomains::DomainHandler
       end
 
       if MultiDomains.force_redirect_to_https?
-        before_filter :redirect_to_https
+        before_action :redirect_to_https
       end
 
-      before_filter :fetch_current_object_params
-      before_filter :redirect_to_standard
+      before_action :fetch_current_object_params
+      before_action :redirect_to_standard
       helper_method "current_#{MultiDomains.domain_customizable_name}"
     end
   end
